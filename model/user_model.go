@@ -10,13 +10,17 @@ import (
 )
 
 type User struct {
-	UserID        string          `gorm:"primaryKey" json:"userId"`
-	FirstName     string          `gorm:"size:255;not null" json:"firstname"`
-	LastName      string          `gorm:"size:255;not null" json:"lastname"`
-	Email         string          `gorm:"size:255;not null;unique" json:"email"`
-	Password      string          `gorm:"size:255;not null;" json:"-"`
-	Phone         string          `json:"phone"`
+	UserID        string          `gorm:"primaryKey" json:"userId" validate:"required,uuid"`
+	FirstName     string          `gorm:"size:255;not null" json:"firstname" validate:"required"`
+	LastName      string          `gorm:"size:255;not null" json:"lastname" validate:"required"`
+	Email         string          `gorm:"size:255;not null;unique" json:"email" validate:"required,email"`
+	Password      string          `gorm:"size:255;not null" json:"-" validate:"required"`
+	Phone         string          `json:"phone" validate:"required"`
 	Organisations []*Organisation `gorm:"many2many:user_organisations;"`
+}
+
+type AddUserInput struct {
+	UserID string `json:"userId" binding:"required"`
 }
 
 func (user *User) Save() (*User, error) {

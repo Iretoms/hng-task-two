@@ -9,10 +9,11 @@ import (
 	"github.com/Iretoms/hng-task-two/model"
 	"github.com/Iretoms/hng-task-two/responses"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
 
-// var validate = validator.New()
+var validate = validator.New()
 
 func Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -20,11 +21,19 @@ func Register() gin.HandlerFunc {
 
 		if err := c.ShouldBindJSON(&input); err != nil {
 			c.JSON(
-				http.StatusBadRequest,
+				http.StatusUnprocessableEntity,
 				responses.ErrorResponse{
-					Status:     "Bad request",
-					Message:    "Registration Unsuccessful",
-					StatusCode: http.StatusBadRequest,
+					Errors: helper.FormatValidationError(err),
+				})
+			return
+		}
+
+		err := validate.Struct(input)
+		if err != nil {
+			c.JSON(
+				http.StatusUnprocessableEntity,
+				responses.ErrorResponse{
+					Errors: helper.FormatValidationError(err),
 				})
 			return
 		}
@@ -43,8 +52,10 @@ func Register() gin.HandlerFunc {
 			Password:  input.Password,
 			Phone:     input.Phone,
 			Organisations: []*model.Organisation{{
-				OrgID: uuidString2,
-				Name:  fmt.Sprintf("%v's Organisation", input.FirstName)}},
+				OrgID:       uuidString2,
+				Name:        fmt.Sprintf("%v's Organisation", input.FirstName),
+				Description: "",
+			}},
 		}
 
 		savedUser, err := user.Save()

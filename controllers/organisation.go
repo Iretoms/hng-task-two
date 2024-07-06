@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Iretoms/hng-task-two/config"
 	"github.com/Iretoms/hng-task-two/helper"
 	"github.com/Iretoms/hng-task-two/model"
 	"github.com/Iretoms/hng-task-two/responses"
@@ -106,5 +107,32 @@ func CreateOrganisation() gin.HandlerFunc {
 				Name:        newOrg.Name,
 				Description: newOrg.Description,
 			}})
+	}
+}
+
+func AddUserToOrganisation() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		orgId := c.Param("orgId")
+
+		var userInput model.AddUserInput
+		if err := c.ShouldBindJSON(&userInput); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request: " + err.Error()})
+			return
+		}
+
+		organisation, _ := model.FindOrganisationById(orgId)
+		user, _ := model.FindUserById(userInput.UserID)
+
+		organisation.Users = append(organisation.Users, &user)
+
+		if err := config.Database.Save(&organisation).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add user to organisation: " + err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "Success",
+			"message": "User added to organisation successfully",
+		})
 	}
 }
