@@ -53,3 +53,13 @@ func FindUserByEmail(email string) (User, error) {
 	}
 	return user, nil
 }
+
+func FindUserById(id string) (User, error) {
+	var user User
+
+	err := config.Database.Preload("Organisations").Where("user_id=?", id).Find(&user).Error
+	if err != nil {
+		return User{}, err
+	}
+	return user, nil
+}

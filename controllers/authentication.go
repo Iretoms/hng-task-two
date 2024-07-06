@@ -19,7 +19,13 @@ func Register() gin.HandlerFunc {
 		var input model.RegisterInput
 
 		if err := c.ShouldBindJSON(&input); err != nil {
-			c.JSON(http.StatusBadRequest, responses.ErrorResponse{Status: "Bad request", Message: "Registration Unsuccessful", StatusCode: http.StatusBadRequest})
+			c.JSON(
+				http.StatusBadRequest,
+				responses.ErrorResponse{
+					Status:     "Bad request",
+					Message:    "Registration Unsuccessful",
+					StatusCode: http.StatusBadRequest,
+				})
 			return
 		}
 
@@ -30,29 +36,57 @@ func Register() gin.HandlerFunc {
 		uuidString2 := strings.Replace(uuid2.String(), "-", "", -1)
 
 		user := model.User{
-			UserID:        uuidString1,
-			FirstName:     input.FirstName,
-			LastName:      input.LastName,
-			Email:         input.Email,
-			Password:      input.Password,
-			Phone:         input.Phone,
-			Organisations: []*model.Organisation{{OrgID: uuidString2, Name: fmt.Sprintf("%v's Organisation", input.FirstName)}},
+			UserID:    uuidString1,
+			FirstName: input.FirstName,
+			LastName:  input.LastName,
+			Email:     input.Email,
+			Password:  input.Password,
+			Phone:     input.Phone,
+			Organisations: []*model.Organisation{{
+				OrgID: uuidString2,
+				Name:  fmt.Sprintf("%v's Organisation", input.FirstName)}},
 		}
 
 		savedUser, err := user.Save()
 
 		if err != nil {
-			c.JSON(http.StatusBadRequest, responses.ErrorResponse{Status: "Bad request", Message: "Registration Unsuccessful", StatusCode: http.StatusBadRequest})
+			c.JSON(
+				http.StatusBadRequest,
+				responses.ErrorResponse{
+					Status:     "Bad request",
+					Message:    "Registration Unsuccessful",
+					StatusCode: http.StatusBadRequest,
+				})
 			return
 		}
 
 		jwt, err := helper.GenerateJWT(user)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, responses.ErrorResponse{Status: "Bad request", Message: "Registration Unsuccessful", StatusCode: http.StatusBadRequest})
+			c.JSON(
+				http.StatusBadRequest,
+				responses.ErrorResponse{
+					Status:     "Bad request",
+					Message:    "Registration Unsuccessful",
+					StatusCode: http.StatusBadRequest,
+				})
 			return
 		}
 
-		c.JSON(http.StatusCreated, responses.SuccessResponse{Status: "success", Message: "Registration successful", Data: responses.Data{AccessToken: jwt, User: responses.User{UserID: savedUser.UserID, FirstName: savedUser.FirstName, LastName: savedUser.LastName, Email: savedUser.Email, Phone: savedUser.Phone}}})
+		c.JSON(
+			http.StatusCreated,
+			responses.SuccessResponse{
+				Status:  "success",
+				Message: "Registration successful",
+				Data: responses.Data{
+					AccessToken: jwt,
+					User: responses.UserRes{
+						UserID:    savedUser.UserID,
+						FirstName: savedUser.FirstName,
+						LastName:  savedUser.LastName,
+						Email:     savedUser.Email,
+						Phone:     savedUser.Phone},
+				},
+			})
 	}
 }
 
@@ -61,31 +95,68 @@ func Login() gin.HandlerFunc {
 		var input model.LoginInput
 
 		if err := c.ShouldBindJSON(&input); err != nil {
-			c.JSON(http.StatusBadRequest, responses.ErrorResponse{Status: "Bad request", Message: "Registration Unsuccessful", StatusCode: http.StatusBadRequest})
+			c.JSON(
+				http.StatusUnauthorized,
+				responses.ErrorResponse{
+					Status:     "Bad request",
+					Message:    "Authentication failed",
+					StatusCode: http.StatusBadRequest,
+				})
 			return
 		}
 
 		user, err := model.FindUserByEmail(input.Email)
 
 		if err != nil {
-			c.JSON(http.StatusBadRequest, responses.ErrorResponse{Status: "Bad request", Message: "Registration Unsuccessful", StatusCode: http.StatusBadRequest})
+			c.JSON(
+				http.StatusUnauthorized,
+				responses.ErrorResponse{
+					Status:     "Bad request",
+					Message:    "Authentication failed",
+					StatusCode: http.StatusBadRequest,
+				})
 			return
 		}
 
 		err = user.ValidatePassword(input.Password)
 
 		if err != nil {
-			c.JSON(http.StatusBadRequest, responses.ErrorResponse{Status: "Bad request", Message: "Registration Unsuccessful", StatusCode: http.StatusBadRequest})
+			c.JSON(
+				http.StatusUnauthorized,
+				responses.ErrorResponse{
+					Status:     "Bad request",
+					Message:    "Authentication failed",
+					StatusCode: http.StatusBadRequest,
+				})
 			return
 		}
 
 		jwt, err := helper.GenerateJWT(user)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, responses.ErrorResponse{Status: "Bad request", Message: "Registration Unsuccessful", StatusCode: http.StatusBadRequest})
+			c.JSON(
+				http.StatusUnauthorized,
+				responses.ErrorResponse{
+					Status:     "Bad request",
+					Message:    "Authentication failed",
+					StatusCode: http.StatusBadRequest,
+				})
 			return
 		}
 
-		c.JSON(http.StatusOK, responses.SuccessResponse{Status: "success", Message: "Login successful", Data: responses.Data{AccessToken: jwt, User: responses.User{UserID: user.UserID, FirstName: user.FirstName, LastName: user.LastName, Email: user.Email, Phone: user.Phone}}})
+		c.JSON(
+			http.StatusOK,
+			responses.SuccessResponse{
+				Status:  "success",
+				Message: "Login successful",
+				Data: responses.Data{
+					AccessToken: jwt,
+					User: responses.UserRes{
+						UserID:    user.UserID,
+						FirstName: user.FirstName,
+						LastName:  user.LastName,
+						Email:     user.Email,
+						Phone:     user.Phone,
+					}}})
 
 	}
 }

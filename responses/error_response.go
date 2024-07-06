@@ -1,7 +1,13 @@
 package responses
 
 type ErrorResponse struct {
-	Status string `json:"status"`
-	Message string `json:"message"`
-	StatusCode int `json:"statusCode"`
+	Status     string  `json:"status,omitempty"`
+	Message    string  `json:"message,omitempty"`
+	StatusCode int     `json:"statusCode,omitempty"`
+	Errors     []Error `json:"errors,omitempty"`
+}
+
+type Error struct {
+	Field   string `json:"field,omitempty"`
+	Message string `json:"message,omitempty"`
 }

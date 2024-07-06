@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Iretoms/hng-task-two/config"
+	"github.com/Iretoms/hng-task-two/middleware"
 	"github.com/Iretoms/hng-task-two/model"
 	"github.com/Iretoms/hng-task-two/routes"
 	"github.com/gin-gonic/gin"
@@ -19,20 +20,21 @@ func main() {
 
 func loadDatabase() {
 	config.Connect()
-	config.Database.AutoMigrate(&model.User{})
-	config.Database.AutoMigrate(&model.Organisation{})
+	config.Database.AutoMigrate(&model.User{}, &model.Organisation{})
 }
 
 func serveApp() {
 	router := gin.Default()
 
-	apiRoutes := router.Group("/api")
-	authRoutes := router.Group("/auth")
+	protectedRoutes := router.Group("/api")
+	publicRoutes := router.Group("/auth")
 
-	routes.RegisterRoute(authRoutes)
-	routes.LoginRoute(authRoutes)
-	routes.UserRoutes(apiRoutes)
-	routes.OrganisationRoutes(apiRoutes)
+	routes.RegisterRoute(publicRoutes)
+	routes.LoginRoute(publicRoutes)
+
+	protectedRoutes.Use(middleware.JWTAuthMiddleware())
+	routes.UserRoutes(protectedRoutes)
+	routes.OrganisationRoutes(protectedRoutes)
 
 	router.Run(":8080")
 	fmt.Println("Server running on port 8080")

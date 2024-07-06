@@ -1,10 +1,13 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/Iretoms/hng-task-two/controllers"
+	"github.com/gin-gonic/gin"
+)
 
 func OrganisationRoutes(r *gin.RouterGroup) {
-	r.POST("/organisations")
+	r.POST("/organisations", controllers.CreateOrganisation())
 	r.POST("/organisations/:orgId/users")
-	r.GET("/organisations/:orgId")
-	r.GET("/organisations")
+	r.GET("/organisations/:orgId", controllers.GetSingleOrganisation())
+	r.GET("/organisations", controllers.GetUserOrganisations())
 }
