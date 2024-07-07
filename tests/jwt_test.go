@@ -18,16 +18,7 @@ import (
 var privateKey []byte
 
 func GenerateJWT(user model.User) (string, error) {
-	tokenTTLMinutes, err := strconv.Atoi(os.Getenv("TOKEN_TTL"))
-	if err != nil {
-		fmt.Println("Error parsing TOKEN_TTL:", err)
-		tokenTTLMinutes = 15
-	}
-	if tokenTTLMinutes < 1 || tokenTTLMinutes > 60 {
-		fmt.Println("TOKEN_TTL out of range, using default of 15 minutes")
-		tokenTTLMinutes = 15
-	}
-	fmt.Printf("TOKEN_TTL: %d minutes\n", tokenTTLMinutes)
+	tokenTTLMinutes, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
 
 	now := time.Now()
 	iat := now.Unix()
@@ -50,37 +41,24 @@ func TestGenerateJWT(t *testing.T) {
 		t.Fatal("JWT_SECRET_KEY environment variable is not set")
 	}
 
-	// Test user
 	user := model.User{UserID: "85d7b1717583401083e5d5c1c85edc8c"}
 
-	// Generate token
 	tokenString, err := GenerateJWT(user)
 	assert.NoError(t, err, "Token generation should not produce an error")
-	fmt.Println("Token:", tokenString)
 
-	// Parse token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return privateKey, nil
 	})
 	assert.NoError(t, err, "Token parsing should not produce an error")
 
-	// Validate claims
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		fmt.Printf("Claims: %+v\n", claims)
 
 		assert.Equal(t, user.UserID, claims["id"], "UserID should match")
 
-		issuedAt := int64(claims["iat"].(float64))
 		expirationAt := int64(claims["exp"].(float64))
 
-		// Calculate the expected expiration time
 		expectedExpiration := time.Now().Add(15 * time.Minute)
 
-		log.Println("issuedAt", time.Unix(issuedAt, 0))
-		log.Println("expiredAt", time.Unix(expirationAt, 0))
-		log.Println("expected", expectedExpiration)
-
-		// Allow for a small timing difference (e.g., 5 seconds)
 		assert.WithinDuration(t, time.Unix(expirationAt, 0), expectedExpiration, 5*time.Second, "Expiration time should be close to 15 minutes from now")
 
 	} else {
@@ -94,13 +72,10 @@ func loadEnv() {
 		log.Fatalf("Error determining project root: %v", err)
 	}
 
-	// Construct the path to the .env file
 	envPath := filepath.Join(projectRoot, ".env")
-	fmt.Println("Loading .env from:", envPath)
 	err = godotenv.Load(envPath)
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 	privateKey = []byte(os.Getenv("JWT_SECRET_KEY"))
-	fmt.Println("JWT_SECRET_KEY loaded, length:", len(privateKey))
 }
