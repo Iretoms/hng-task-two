@@ -19,7 +19,8 @@ func main() {
 
 func loadDatabase() {
 	config.Connect()
-	config.Database.AutoMigrate(&model.User{}, &model.Organisation{})
+	config.Database.AutoMigrate(&model.User{})
+	config.Database.AutoMigrate(&model.Organisation{})
 }
 
 func serveApp() {
