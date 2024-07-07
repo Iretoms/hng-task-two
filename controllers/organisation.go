@@ -130,9 +130,9 @@ func AddUserToOrganisation() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{
-			"status":  "Success",
-			"message": "User added to organisation successfully",
+		c.JSON(http.StatusOK, responses.SuccessResponse{
+			Status:  "Success",
+			Message: "User added to organisation successfully",
 		})
 	}
 }

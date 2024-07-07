@@ -16,7 +16,7 @@ type Data struct {
 	OrgID         string            `json:"orgId,omitempty"`
 	Name          string            `json:"name,omitempty"`
 	Description   string            `json:"description,omitempty"`
-	User          UserRes           `json:"user,omitempty"`
+	User          *UserRes           `json:"user,omitempty"`
 	Organisations []OrganisationRes `json:"organisation,omitempty"`
 }
 

@@ -90,7 +90,7 @@ func Register() gin.HandlerFunc {
 				Message: "Registration successful",
 				Data: responses.Data{
 					AccessToken: jwt,
-					User: responses.UserRes{
+					User: &responses.UserRes{
 						UserID:    savedUser.UserID,
 						FirstName: savedUser.FirstName,
 						LastName:  savedUser.LastName,
@@ -161,7 +161,7 @@ func Login() gin.HandlerFunc {
 				Message: "Login successful",
 				Data: responses.Data{
 					AccessToken: jwt,
-					User: responses.UserRes{
+					User: &responses.UserRes{
 						UserID:    user.UserID,
 						FirstName: user.FirstName,
 						LastName:  user.LastName,
