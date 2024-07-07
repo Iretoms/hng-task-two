@@ -107,11 +107,19 @@ func Login() gin.HandlerFunc {
 
 		if err := c.ShouldBindJSON(&input); err != nil {
 			c.JSON(
-				http.StatusUnauthorized,
+				http.StatusUnprocessableEntity,
 				responses.ErrorResponse{
-					Status:     "Bad request",
-					Message:    "Authentication failed",
-					StatusCode: http.StatusBadRequest,
+					Errors: helper.FormatValidationError(err),
+				})
+			return
+		}
+
+		err := validate.Struct(input)
+		if err != nil {
+			c.JSON(
+				http.StatusUnprocessableEntity,
+				responses.ErrorResponse{
+					Errors: helper.FormatValidationError(err),
 				})
 			return
 		}
@@ -124,7 +132,7 @@ func Login() gin.HandlerFunc {
 				responses.ErrorResponse{
 					Status:     "Bad request",
 					Message:    "Authentication failed",
-					StatusCode: http.StatusBadRequest,
+					StatusCode: http.StatusUnauthorized,
 				})
 			return
 		}
@@ -137,7 +145,7 @@ func Login() gin.HandlerFunc {
 				responses.ErrorResponse{
 					Status:     "Bad request",
 					Message:    "Authentication failed",
-					StatusCode: http.StatusBadRequest,
+					StatusCode: http.StatusUnauthorized,
 				})
 			return
 		}
@@ -149,7 +157,7 @@ func Login() gin.HandlerFunc {
 				responses.ErrorResponse{
 					Status:     "Bad request",
 					Message:    "Authentication failed",
-					StatusCode: http.StatusBadRequest,
+					StatusCode: http.StatusUnauthorized,
 				})
 			return
 		}

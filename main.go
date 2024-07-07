@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Iretoms/hng-task-two/config"
+	"github.com/Iretoms/hng-task-two/controllers"
 	"github.com/Iretoms/hng-task-two/middleware"
 	"github.com/Iretoms/hng-task-two/model"
 	"github.com/Iretoms/hng-task-two/routes"
@@ -31,6 +32,8 @@ func serveApp() {
 
 	routes.RegisterRoute(publicRoutes)
 	routes.LoginRoute(publicRoutes)
+
+	protectedRoutes.POST("/organisations/:orgId/users", controllers.AddUserToOrganisation()) ///not protected according to task requirement
 
 	protectedRoutes.Use(middleware.JWTAuthMiddleware())
 	routes.UserRoutes(protectedRoutes)
