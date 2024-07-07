@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -68,6 +69,7 @@ func Register() gin.HandlerFunc {
 					Message:    "Registration Unsuccessful",
 					StatusCode: http.StatusBadRequest,
 				})
+			log.Printf("Error saving user: %v", err)
 			return
 		}
 
@@ -80,6 +82,7 @@ func Register() gin.HandlerFunc {
 					Message:    "Registration Unsuccessful",
 					StatusCode: http.StatusBadRequest,
 				})
+			log.Printf("Error generating JWT: %v", err)
 			return
 		}
 
