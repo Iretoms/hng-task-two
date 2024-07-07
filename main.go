@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/Iretoms/hng-task-two/config"
 	"github.com/Iretoms/hng-task-two/controllers"
@@ -19,8 +20,10 @@ func main() {
 
 func loadDatabase() {
 	config.Connect()
-	config.Database.AutoMigrate(&model.User{})
-	config.Database.AutoMigrate(&model.Organisation{})
+	err := config.Database.AutoMigrate(&model.User{}, &model.Organisation{})
+	if err != nil {
+		log.Fatalf("Could not migrate the database: %v", err)
+	}
 }
 
 func serveApp() {
