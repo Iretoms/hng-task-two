@@ -20,18 +20,9 @@ func main() {
 
 func loadDatabase() {
 	config.Connect()
-	autoMigrateDatabase()
-}
-
-func autoMigrateDatabase() {
-	if !config.Database.Migrator().HasTable(&model.User{}) {
-		err := config.Database.AutoMigrate(&model.User{}, &model.Organisation{})
-		if err != nil {
-			log.Fatalf("Could not migrate the database: %v", err)
-		}
-		fmt.Println("Database migration completed successfully")
-	} else {
-		fmt.Println("Tables already exist, skipping migration")
+	err := config.Database.AutoMigrate(&model.User{}, &model.Organisation{})
+	if err != nil {
+		log.Fatalf("Could not migrate the database: %v", err)
 	}
 }
 
