@@ -63,7 +63,7 @@ func CreateOrganisation() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status":     "Bad request",
 				"message":    "Client error",
-				"statusCode": "400",
+				"statusCode": http.StatusBadRequest,
 			})
 			return
 		}
@@ -74,7 +74,7 @@ func CreateOrganisation() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status":     "Bad request",
 				"message":    "Client error",
-				"statusCode": "400",
+				"statusCode": http.StatusBadRequest,
 			})
 			return
 		}
@@ -94,7 +94,7 @@ func CreateOrganisation() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status":     "Bad request",
 				"message":    "Client error",
-				"statusCode": "400",
+				"statusCode": http.StatusBadRequest,
 			})
 			return
 		}
