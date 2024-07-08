@@ -15,7 +15,7 @@ type User struct {
 	LastName      string          `gorm:"size:255;not null" json:"lastName" validate:"required"`
 	Email         string          `gorm:"size:255;not null;unique" json:"email" validate:"required,email"`
 	Password      string          `gorm:"size:255;not null" json:"-" validate:"required"`
-	Phone         string          `json:"phone" validate:"required"`
+	Phone         string          `json:"phone"`
 	Organisations []*Organisation `gorm:"many2many:user_organisations;"`
 }
 

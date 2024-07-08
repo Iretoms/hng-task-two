@@ -66,7 +66,7 @@ func Register() gin.HandlerFunc {
 				http.StatusBadRequest,
 				responses.ErrorResponse{
 					Status:     "Bad request",
-					Message:    "Registration Unsuccessful",
+					Message:    "Registration unsuccessful",
 					StatusCode: http.StatusBadRequest,
 				})
 			log.Printf("Error saving user: %v", err)
@@ -79,7 +79,7 @@ func Register() gin.HandlerFunc {
 				http.StatusBadRequest,
 				responses.ErrorResponse{
 					Status:     "Bad request",
-					Message:    "Registration Unsuccessful",
+					Message:    "Registration unsuccessful",
 					StatusCode: http.StatusBadRequest,
 				})
 			log.Printf("Error generating JWT: %v", err)

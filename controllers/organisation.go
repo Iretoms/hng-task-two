@@ -27,7 +27,7 @@ func GetUserOrganisations() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, responses.SuccessResponse{
-			Status:  "Success",
+			Status:  "success",
 			Message: "User Organisations fetch successful",
 			Data: responses.Data{
 				Organisations: organisations,
@@ -43,7 +43,7 @@ func GetSingleOrganisation() gin.HandlerFunc {
 		organisation, _ := model.FindOrganisationById(orgId)
 
 		c.JSON(http.StatusOK, gin.H{
-			"status":  "Success",
+			"status":  "success",
 			"message": "Organisation gotten successfully",
 			"data": responses.OrganisationRes{
 				OrgID:       organisation.OrgID,
@@ -100,7 +100,7 @@ func CreateOrganisation() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusCreated, gin.H{
-			"status":  "Success",
+			"status":  "success",
 			"message": "Organisation created successfully",
 			"data": responses.OrganisationRes{
 				OrgID:       newOrg.OrgID,
@@ -130,9 +130,9 @@ func AddUserToOrganisation() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, responses.SuccessResponse{
-			Status:  "Success",
-			Message: "User added to organisation successfully",
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "User added to organisation successfully",
 		})
 	}
 }
