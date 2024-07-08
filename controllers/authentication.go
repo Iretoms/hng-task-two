@@ -13,7 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 var validate = validator.New()
@@ -49,15 +48,6 @@ func Register() gin.HandlerFunc {
 					Status:     "Conflict",
 					Message:    "Email already exists",
 					StatusCode: http.StatusConflict,
-				})
-			return
-		} else if err != gorm.ErrRecordNotFound {
-			c.JSON(
-				http.StatusInternalServerError,
-				responses.ErrorResponse{
-					Status:     "Internal Server Error",
-					Message:    "Error checking for existing user",
-					StatusCode: http.StatusInternalServerError,
 				})
 			return
 		}
