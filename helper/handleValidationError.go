@@ -10,7 +10,7 @@ func FormatValidationError(err error) []responses.Error {
 	for _, err := range err.(validator.ValidationErrors) {
 		var element responses.Error
 		element.Field = err.Field()
-		element.Message = "Invalid input"
+		element.Message = "Required Input"
 		errors = append(errors, element)
 	}
 	return errors
