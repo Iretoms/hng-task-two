@@ -129,7 +129,7 @@ func TestUserAuth(t *testing.T) {
 		requestBody, _ := json.Marshal(map[string]string{
 			"firstName": "Jane",
 			"lastName":  "Doe",
-			"email":     "john.doe@example.com", // Duplicate email
+			"email":     "john.doe@example.com",
 			"password":  "password123",
 			"phone":     "09034087736",
 		})
