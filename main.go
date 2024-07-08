@@ -10,11 +10,10 @@ import (
 	"github.com/Iretoms/hng-task-two/model"
 	"github.com/Iretoms/hng-task-two/routes"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	loadEnv()
+	// loadEnv()
 	loadDatabase()
 	serveApp()
 }
@@ -46,9 +45,9 @@ func serveApp() {
 	fmt.Println("Server running on port 8080")
 }
 
-func loadEnv() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-}
+// func loadEnv() {
+// 	err := godotenv.Load(".env")
+// 	if err != nil {
+// 		log.Fatal("Error loading .env file")
+// 	}
+// }
