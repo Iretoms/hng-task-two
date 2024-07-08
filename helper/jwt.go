@@ -13,11 +13,12 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
+
 var privateKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 func GenerateJWT(user model.User) (string, error) {
 	tokenTTLMinutes, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
-	
+
 	now := time.Now()
 	iat := now.Unix()
 	exp := now.Add(time.Duration(tokenTTLMinutes) * time.Minute).Unix()

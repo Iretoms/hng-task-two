@@ -11,8 +11,8 @@ import (
 
 type User struct {
 	UserID        string          `gorm:"primaryKey" json:"userId" validate:"required,uuid"`
-	FirstName     string          `gorm:"size:255;not null" json:"firstname" validate:"required"`
-	LastName      string          `gorm:"size:255;not null" json:"lastname" validate:"required"`
+	FirstName     string          `gorm:"size:255;not null" json:"firstName" validate:"required"`
+	LastName      string          `gorm:"size:255;not null" json:"lastName" validate:"required"`
 	Email         string          `gorm:"size:255;not null;unique" json:"email" validate:"required,email"`
 	Password      string          `gorm:"size:255;not null" json:"-" validate:"required"`
 	Phone         string          `json:"phone" validate:"required"`

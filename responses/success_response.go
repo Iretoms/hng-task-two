@@ -9,8 +9,8 @@ type SuccessResponse struct {
 type Data struct {
 	AccessToken   string            `json:"accessToken,omitempty"`
 	UserID        string            `json:"userId,omitempty"`
-	FirstName     string            `json:"firstname,omitempty"`
-	LastName      string            `json:"lastname,omitempty"`
+	FirstName     string            `json:"firstName,omitempty"`
+	LastName      string            `json:"lastName,omitempty"`
 	Email         string            `json:"email,omitempty"`
 	Phone         string            `json:"phone,omitempty"`
 	OrgID         string            `json:"orgId,omitempty"`
@@ -22,8 +22,8 @@ type Data struct {
 
 type UserRes struct {
 	UserID    string `json:"userId,omitempty"`
-	FirstName string `json:"firstname,omitempty"`
-	LastName  string `json:"lastname,omitempty"`
+	FirstName string `json:"firstName,omitempty"`
+	LastName  string `json:"lastName,omitempty"`
 	Email     string `json:"email,omitempty"`
 	Phone     string `json:"phone,omitempty"`
 }

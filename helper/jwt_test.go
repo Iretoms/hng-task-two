@@ -1,11 +1,9 @@
-package tests
+package helper
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
-	"strconv"
 	"testing"
 	"time"
 
@@ -15,26 +13,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var privateKey []byte
-
-func GenerateJWT(user model.User) (string, error) {
-	tokenTTLMinutes, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
-
-	now := time.Now()
-	iat := now.Unix()
-	exp := now.Add(time.Duration(tokenTTLMinutes) * time.Minute).Unix()
-
-	fmt.Printf("iat: %v, exp: %v, difference: %v minutes\n", iat, exp, tokenTTLMinutes)
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":  user.UserID,
-		"iat": iat,
-		"exp": exp,
-	})
-	return token.SignedString(privateKey)
-}
-
 func TestGenerateJWT(t *testing.T) {
+
 	loadEnv()
 
 	if len(privateKey) == 0 {
@@ -77,5 +57,6 @@ func loadEnv() {
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
+
 	privateKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 }
