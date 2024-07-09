@@ -99,6 +99,11 @@ func Register() gin.HandlerFunc {
 						LastName:  savedUser.LastName,
 						Email:     savedUser.Email,
 						Phone:     savedUser.Phone,
+						Organisations: []responses.OrganisationRes{{
+							OrgID:       savedUser.Organisations[0].OrgID,
+							Name:        savedUser.Organisations[0].Name,
+							Description: savedUser.Organisations[0].Description,
+						}},
 					},
 				},
 			})
